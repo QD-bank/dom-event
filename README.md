@@ -1,4 +1,4 @@
-# DOM事件模型
+# DOM事件
 
 我是从点击事件开始了解事件模型，2002年， W3C发布了一个标准：
 
@@ -45,3 +45,68 @@ e.addEventListener('click', fn, bool)
 ## 【总结】
 
 以上是我对DOM事件一点简单了解，后续学到新的知识再进行补充！！！
+
+## 事件委托
+
+事件委托就是利用事件冒泡，指定一个事件处理程序，就可以管理某一类型的所有事件
+
+## 事件委托原理
+
+不用给每个子节点单独设置事件监听，而是把事件监听设置在父节点上，利用冒泡原理，影响设置每个字节点
+
+案例一：你要给10个按钮添加点击事件，如何操作
+
+代码：
+
+```html
+
+<!-- div#div1>button{click $}*10 -->  
+<div id="div1">  
+<button>click 1</button>  
+<button>click 2</button>  
+<button>click 3</button>  
+<button>click 4</button>  
+<button>click 5</button>  
+<button>click 6</button>  
+<button>click 7</button>  
+<button>click 8</button>  
+<button>click 9</button>  
+<button>click 10</button>  
+</div>
+
+```
+
+监听它们的祖先，等冒泡的时候判断这10个里面有没有（target）被操的的元素
+
+代码：
+
+```javascript
+
+div1.addEventListener('click', (e) => {  
+const t = e.target  
+if(t.tagName.toLowerCase()==='button'){  console.log('button 被点击了')  
+console.log('button 被点击了' + t.textContent)   
+}
+})
+
+```
+
+案例二：监听目前不存在的元素的点击事件
+
+```javascript
+
+setTimeout(()=>{  
+const button = document.createElement('button')  
+button.textContent = 'click 1'  
+div1.appendChild(button) },1000)  
+
+div1.addEventListener('click', 
+(e)=>{  const t = e.target  
+if(t.tagName.toLowerCase() === 'button'){  
+console.log('button click')     
+}   
+} )
+
+```
+
+监听祖先元素
